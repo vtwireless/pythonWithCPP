@@ -10,6 +10,48 @@
 
 namespace py = pybind11;
 
+void print_pyobject(py::object o)
+{
+    if (py::isinstance<py::dict>(o)) {
+        size_t i=0, n=py::dict(o).size();
+        printf("{");
+        for (auto p: py::dict(o)) {
+            std::string k = py::cast<std::string>(p.first);
+            auto        v = py::cast<py::object> (p.second);
+            printf("\"%s\":", k.c_str());
+            print_pyobject(py::cast<py::object>(v));
+            printf("%s", ++i==n ? "" : ",");
+        }
+        printf("}");
+    } else if (py::isinstance<py::list>(o) || py::isinstance<py::tuple>(o)) {
+        size_t i=0, n=py::list(o).size();
+        printf("[");
+        for (auto v: py::list(o)) {
+            print_pyobject(py::cast<py::object>(v));
+            printf("%s", ++i==n ? "" : ",");
+        }
+        printf("]");
+    } else if (py::isinstance<py::bool_>(o)) {
+        printf("%s", bool(py::bool_(o)) ? "true" : "false");
+    } else if (py::isinstance<py::int_>(o)) {
+        printf("%d", int(py::int_(o)));
+    } else if (py::isinstance<py::float_>(o)) {
+        printf("%g", float(py::float_(o)));
+    } else if (py::isinstance<py::none>(o)) {
+        printf("null");
+    } else if (py::isinstance<py::str>(o)) {
+        printf("\"%s\"", std::string(py::str(o)).c_str());
+    } else {
+        printf("?\n");
+    }
+}
+
+int white(py::object v=py::none())
+{
+    print_pyobject(v);
+    printf("\n");
+    return 0;
+}
 
 // I know this is not the form that I want.
 //
@@ -43,4 +85,6 @@ PYBIND11_MODULE(mod,m) {
     m.doc() = "pybind11 example plugin";
 
     m.def("magic", &magic, "Magic function");
+    m.def("white", &white, "Down the rabbit hole",
+          py::arg("v")=py::none());
 }
