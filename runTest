@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+
+
+# If python import path is a problem:
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.realpath(__file__)))
+
+
+
+import mod
+
+
+#print("hello")
+
+#print(mod)
+#print(mod.magic)
+print(mod.magic(3, 4))
+#print([4, "foo", { "bar", 5, 6 } ])
+
+# I want magic to take any number and type of arguments.
+
+# this will fail.  I'd like the mod.magic() to be able to
+# handle any arguments.
+print(mod.magic(3, 4, 5))
+
+# I want magic to work with any arguments:
+print(mod.magic([4, "foo", { "bar", 5, 6 } ], "cake", "pie"))
+
