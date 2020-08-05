@@ -30,6 +30,14 @@ mod.white((1,2,None,"white","black",))
 # print more complex dictionary types
 mod.white({'a':12, 'b':88, 'c':[1,2,3,4,], 'd':{'white':'white'}})
 
+# variable number of arguments
+mod.rabbit(0)
+mod.rabbit(0,1)
+mod.rabbit(0,1,2,3,4,5)
+
+# print with a mix of values
+mod.rabbit(0,1,2,"wonderland",{'a':1, 'b':2}, ("this","is","a","tuple"))
+
 '''
 
 # I want magic to take any number and type of arguments.

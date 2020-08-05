@@ -10,6 +10,8 @@
 
 namespace py = pybind11;
 
+// recursive function to print a python object (while there are better ways to
+// print, this demonstrates parsing simple or complex python types)
 void print_pyobject(py::object o)
 {
     if (py::isinstance<py::dict>(o)) {
@@ -53,6 +55,19 @@ int white(py::object v=py::none())
     return 0;
 }
 
+int rabbit(py::args args)
+{
+    for (auto arg: args) {
+        // 'arg' is of type py::handle which for some reason causes
+        // problems with casting to specific pybind instances; casting
+        // as a py::object fixes this. There are probably better methods...
+        print_pyobject( py::cast<py::object>(arg) );
+        printf(",");
+    }
+    printf("\n");
+    return 0;
+}
+
 // I know this is not the form that I want.
 //
 // It needs to have generic arguments.  I need to parse the arguments that
@@ -87,4 +102,5 @@ PYBIND11_MODULE(mod,m) {
     m.def("magic", &magic, "Magic function");
     m.def("white", &white, "Down the rabbit hole",
           py::arg("v")=py::none());
+    m.def("rabbit", &rabbit, "Alice");
 }
