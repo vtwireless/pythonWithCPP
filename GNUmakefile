@@ -11,7 +11,7 @@ PY_LDFLAGS := -L$(PY_LIBDIR) -lpython$(PY_VER) -Wl,-rpath -Wl,$(PY_LIBDIR)
 PYBIND11_CPPFLAGS := $(shell python3 -m pybind11 --includes)
 
 
-CXXFLAGS := -g -Wall -Werror
+CXXFLAGS := -g -Wall -Werror -std=c++11
 
 SLIBS := mod.so
 mod.lo_CPPFLAGS := $(PY_CFLAGS) $(PYBIND11_CPPFLAGS)
